@@ -225,4 +225,5 @@ if __name__ == "__main__":
     print(f"\nTraining complete!")
     print(f"Run ID: {run_id}")
     print(f"Accuracy: {metrics['accuracy']:.4f}")
-    print(f"F1 Score: {metrics['f1_macro']:.4f}")
+    print(f"F1 Score: {metrics['f1_macro']:.4f}")#   t r i g g e r  
+ 
