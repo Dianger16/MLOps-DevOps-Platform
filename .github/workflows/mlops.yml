@@ -209,9 +209,7 @@ jobs:
         run: |
           sed -i "s|IMAGE_PLACEHOLDER|$IMAGE|g" k8s/deployment.yaml
           kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
-          kubectl apply -f k8s/hpa.yaml
-
+          
       - name: Wait for rollout
         run: |
           kubectl rollout status deployment/sentiment-api \
