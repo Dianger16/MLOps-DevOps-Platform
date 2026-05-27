@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+.env
+model/artifacts/
+mlflow-artifacts/
+mlflow.db
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+*.log
+.pytest_cache/
+classification_report.txt
+confusion_matrix.json
+AWSCLIV2.msi

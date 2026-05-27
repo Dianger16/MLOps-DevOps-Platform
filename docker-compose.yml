@@ -1,0 +1,50 @@
+version: "3.9"
+
+# Local MLOps stack:
+# - MLflow:  http://localhost:5000  (experiment tracking)
+# - API:     http://localhost:8080  (model serving)
+
+services:
+
+  # ── MLflow tracking server ──────────────────────────────────────────────────
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.13.0
+    container_name: mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_data:/mlflow
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ── Model serving API ───────────────────────────────────────────────────────
+  api:
+    build: .
+    container_name: sentiment-api
+    ports:
+      - "8080:8080"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - MODEL_VERSION=1.0.0
+      - APP_VERSION=1.0.0
+      - MODEL_PATH=/app/model/artifacts/model.pkl
+    volumes:
+      - ./model/artifacts:/app/model/artifacts
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mlflow_data:
