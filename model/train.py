@@ -206,7 +206,7 @@ def train():
             json.dump(cm_data, f)
         mlflow.log_artifact(cm_path)
 
-        # ── Save model locally ────────────────────────────────────────────────
+        # ── Save model locally + log to MLflow ───────────────────────────────
         model_path = os.path.join("model", "artifacts", "model.pkl")
         with open(model_path, "wb") as f:
             pickle.dump(pipeline, f)
